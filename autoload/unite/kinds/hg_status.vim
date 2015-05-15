@@ -68,19 +68,20 @@ function! s:kind.action_table.add.func(candidates)  " {{{
     echom string(added_files) . ' files added'
 endfunction  " }}}
 
-let s:kind.action_table.view_diff = {
+let s:kind.action_table.diff = {
     \ 'is_selectable': 1,
     \ 'is_quit': 1
     \ }
 
-function! s:kind.action_table.view_diff.func(candidates)  " {{{
-    let candidate_path = a:candidates[0].action__relpath
-    let file_diff = system('hg diff ' . candidate_path)
+function! s:kind.action_table.diff.func(candidates)  " {{{
     vsplit __Hg_Diff__
     normal! ggdG
     setlocal filetype=diff
     setlocal buftype=nofile
-    call append(0, split(file_diff, '\v\n'))
+    for candidate in a:candidates
+        let file_diff = system('hg diff ' . candidate.action__path)
+        call append(0, split(file_diff, '\v\n'))
+    endfor
 endfunction  " }}}
 
 let s:kind.action_table.commit = {
