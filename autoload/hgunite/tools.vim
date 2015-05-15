@@ -35,5 +35,15 @@ function! hgunite#tools#get_repo_root() "{{{
     endif
 endfunction  " }}}
 
+function! hgunite#tools#get_named_window(name) "{{{
+    let winnr = bufwinnr('^' . a:name . '$')
+    if (winnr >=  0)
+        execute winnr . 'wincmd w'
+        return 1
+    else
+        return ''
+    endif
+endfunction  " }}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo

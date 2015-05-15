@@ -74,14 +74,21 @@ let s:kind.action_table.diff = {
     \ }
 
 function! s:kind.action_table.diff.func(candidates)  " {{{
-    vsplit __Hg_Diff__
+    let window_exist = hgunite#tools#get_named_window('__Hg_Diff__')
+    if window_exist == ''
+        vsplit __Hg_Diff__
+        setlocal filetype=diff
+        setlocal buftype=nofile
+    else
+        setlocal noreadonly
+    endif
     normal! ggdG
-    setlocal filetype=diff
-    setlocal buftype=nofile
     for candidate in a:candidates
         let file_diff = system('hg diff ' . candidate.action__path)
         call append(0, split(file_diff, '\v\n'))
     endfor
+    setlocal readonly
+    normal! gg
 endfunction  " }}}
 
 let s:kind.action_table.commit = {
