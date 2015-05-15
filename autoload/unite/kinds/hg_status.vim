@@ -107,7 +107,9 @@ function! s:kind.action_table.commit.func(candidates)  " {{{
     if commit_message == ''
         return
     endif
-    call system(cmd . '-m ' . commit_message)
+    call system(cmd . '-m "' . commit_message . '"')
+    echo ''
+    echo 'Commit done !'
 endfunction  " }}}
 
 let &cpo = s:save_cpo

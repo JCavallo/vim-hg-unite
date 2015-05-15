@@ -36,19 +36,38 @@ let s:kind = {
     \ 'parents': ['word'],
     \ }
 
-let s:kind.action_table.view_diff = {
+let s:kind.action_table.diff = {
     \ 'is_selectable': 1,
     \ 'is_quit': 1
     \ }
 
-function! s:kind.action_table.view_diff.func(candidates)  " {{{
+function! s:kind.action_table.diff.func(candidates)  " {{{
     let candidate_node = a:candidates[0].hg__node
     let file_diff = system('hg diff -c ' . candidate_node)
-    vsplit __Hg_Diff__
+    execute ':90vsplit __Hg_Diff__'
     normal! ggdG
     setlocal filetype=diff
     setlocal buftype=nofile
     call append(0, split(file_diff, '\v\n'))
+    setlocal readonly
+    normal! gg
+endfunction  " }}}
+
+let s:kind.action_table.changelog = {
+    \ 'is_selectable': 1,
+    \ 'is_quit': 1
+    \ }
+
+function! s:kind.action_table.changelog.func(candidates)  " {{{
+    let candidate_node = a:candidates[0].hg__node
+    let file_diff = system('hg log -r ' . candidate_node . ' --style default')
+    execute ':90vsplit __Hg_Log__'
+    normal! ggdG
+    setlocal filetype=diff
+    setlocal buftype=nofile
+    call append(0, split(file_diff, '\v\n'))
+    setlocal readonly
+    normal! gg
 endfunction  " }}}
 
 let &cpo = s:save_cpo
