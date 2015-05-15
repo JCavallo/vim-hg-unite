@@ -83,5 +83,32 @@ function! s:kind.action_table.view_diff.func(candidates)  " {{{
     call append(0, split(file_diff, '\v\n'))
 endfunction  " }}}
 
+let s:kind.action_table.commit = {
+    \ 'is_selectable': 1,
+    \ 'is_quit': 1
+    \ }
+
+function! s:kind.action_table.commit.func(candidates)  " {{{
+    let cmd = 'hg commit '
+    for candidate in a:candidates
+        if candidate.hg__status == '?' || candidate.hg__status == '!'
+            let action = unite#util#input('File ' . candidate.action__relpath .
+                \ 'is in status "' . candidate.hg__status . '", do you want ' .
+                \ 'to add it ? (y/n) : ')
+            if action == 'y'
+                call system('hg add ' . candidate.action__path)
+                let cmd = cmd . candidate.action__path . ' '
+            endif
+        else
+            let cmd = cmd . candidate.action__path . ' '
+        endif
+    endfor
+    let commit_message = unite#util#input('Commit message (empty to abort): ')
+    if commit_message == ''
+        return
+    endif
+    call system(cmd . '-m ' . commit_message)
+endfunction  " }}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
