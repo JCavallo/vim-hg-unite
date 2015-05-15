@@ -29,7 +29,7 @@ function! hgunite#tools#get_repo_root() "{{{
     let output = system('hg root')[:-2]
     if output =~ '^abort: no repository found'
         echoerr 'Could not find a valid hg repository'
-        return 0
+        return ''
     else
         return output
     endif
