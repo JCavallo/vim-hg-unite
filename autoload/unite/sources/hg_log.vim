@@ -37,6 +37,10 @@ let s:source = {
     \ }
 
 function! s:source.gather_candidates(args, context) "{{{
+    let hg_root = hgunite#tools#get_repo_root()
+    if !hg_root
+        return []
+    endif
     let candidates = []
     for line in split(system('hg log --template "{rev}|{node|short}|{branches}|{date|isodate}|{desc|firstline}\n"'), '\n')
         let line_data = split(line, '|')

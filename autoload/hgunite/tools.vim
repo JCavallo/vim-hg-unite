@@ -26,7 +26,13 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! hgunite#tools#get_repo_root() "{{{
-    return system('hg root')[:-2]
+    let output = system('hg root')[:-2]
+    if output =~ '^abort: no repository found'
+        echoerr 'Could not find a valid hg repository'
+        return 0
+    else
+        return output
+    endif
 endfunction  " }}}
 
 let &cpo = s:save_cpo
