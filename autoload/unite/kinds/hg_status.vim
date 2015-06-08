@@ -120,5 +120,32 @@ function! s:kind.action_table.commit.func(candidates)  " {{{
     echo 'Commit done !'
 endfunction  " }}}
 
+let s:kind.action_table.shelve = {
+    \ 'is_selectable': 1,
+    \ 'is_quit': 1
+    \ }
+
+function! s:kind.action_table.shelve.func(candidates)  " {{{
+    let cmd = 'hg shelve '
+    let nbr_of_files = 0
+    for candidate in a:candidates
+        if candidate.hg__status == '?' || candidate.hg__status == '!'
+            let action = unite#util#input('File ' . candidate.action__relpath .
+                \ 'is in status "' . candidate.hg__status . '", do you want ' .
+                \ 'to add it ? (y/n) : ')
+            if action == 'y'
+                call system('hg add ' . candidate.action__path)
+                let cmd = cmd . candidate.action__path . ' '
+                let nbr_of_files = nbr_of_files + 1
+            endif
+        else
+            let cmd = cmd . candidate.action__path . ' '
+            let nbr_of_files = nbr_of_files + 1
+        endif
+    endfor
+    call system(cmd)
+    echo 'Shelved ' . nbr_of_files . ' file(s) !'
+endfunction  " }}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
