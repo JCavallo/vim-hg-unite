@@ -42,7 +42,7 @@ let s:kind.action_table.unshelve = {
     \ }
 
 function! s:kind.action_table.unshelve.func(candidates)  " {{{
-    call system('hg unshelve ' . candidates[0].hg__shelve_name)
+    call system('hg unshelve ' . a:candidates[0].hg__shelve_name)
 endfunction  " }}}
 
 let s:kind.action_table.diff = {
