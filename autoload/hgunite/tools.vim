@@ -27,12 +27,20 @@ set cpo&vim
 
 function! hgunite#tools#get_repo_root() "{{{
     let output = system('hg root')[:-2]
-    if output =~ '^abort: no repository found'
-        echoerr 'Could not find a valid hg repository'
-        return ''
-    else
+    if output !~ '^abort: no repository found'
         return output
     endif
+    for buf_nr in range(1, bufnr('$'))
+        let name = bufname(buf_nr)
+        if name != ''
+            let output = system('cd ' . fnamemodify(name, ':p:h') . ';hg root')[:-2]
+            if output !~ '^abort: no repository found'
+                return output
+            endif
+        endif
+    endfor
+    echoerr 'No repository found'
+    return ''
 endfunction  " }}}
 
 function! hgunite#tools#get_named_window(name) "{{{

@@ -49,7 +49,7 @@ function! s:source.gather_candidates(args, context) "{{{
         return []
     endif
     let candidates = []
-    for line in split(system('hg status'), '\n')
+    for line in split(system('hg status -R ' . hg_root), '\n')
         let action = line[0]
         let fname = line[2:]
         let full_path = hg_root . '/' . fname
@@ -58,7 +58,8 @@ function! s:source.gather_candidates(args, context) "{{{
                 \ 'kind' : 'hg_status',
                 \ 'action__path' : full_path,
                 \ 'action__relpath': fname,
-                \ 'hg__status': line[0]
+                \ 'hg__status': line[0],
+                \ 'hg__root' : hg_root
                 \ })
     endfor
     return candidates

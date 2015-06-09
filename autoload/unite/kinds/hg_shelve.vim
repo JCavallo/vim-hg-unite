@@ -42,7 +42,7 @@ let s:kind.action_table.unshelve = {
     \ }
 
 function! s:kind.action_table.unshelve.func(candidates)  " {{{
-    call system('hg unshelve ' . a:candidates[0].hg__shelve_name)
+    call system('hg unshelve ' . a:candidates[0].hg__shelve_name . ' -R ' . a:candidates[0].hg__root)
 endfunction  " }}}
 
 let s:kind.action_table.diff = {
@@ -52,7 +52,7 @@ let s:kind.action_table.diff = {
 
 function! s:kind.action_table.diff.func(candidates)  " {{{
     let shelve_name = a:candidates[0].hg__shelve_name
-    let file_diff = system('hg shelve -l ' . shelve_name . ' -p')
+    let file_diff = system('hg shelve -l ' . shelve_name . ' -p' . ' -R ' . a:candidates[0].hg__root)
     let window_exist = hgunite#tools#get_named_window('__Hg_Diff__')
     if window_exist == ''
         execute ':90vsplit __Hg_Diff__'

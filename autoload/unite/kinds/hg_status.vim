@@ -45,7 +45,7 @@ function! s:kind.action_table.revert.func(candidates)  " {{{
     let reverted_files = 0
     for candidate in a:candidates
         if candidate.hg__status != '?' && candidate.hg__status != '!'
-            call system('hg revert ' . candidate.action__path)
+            call system('hg revert ' . candidate.action__path . ' -R ' . a:candidates[0].hg__root)
             let reverted_files += 1
         endif
     endfor
@@ -61,7 +61,7 @@ function! s:kind.action_table.add.func(candidates)  " {{{
     let added_files = 0
     for candidate in a:candidates
         if candidate.hg__status == '?' || candidate.hg__status == '!'
-            call system('hg add ' . candidate.action__path)
+            call system('hg add ' . candidate.action__path . ' -R ' . a:candidates[0].hg__root)
             let added_files += 1
         endif
     endfor
@@ -84,7 +84,7 @@ function! s:kind.action_table.diff.func(candidates)  " {{{
     endif
     normal! ggdG
     for candidate in a:candidates
-        let file_diff = system('hg diff ' . candidate.action__path)
+        let file_diff = system('hg diff ' . candidate.action__path . ' -R ' . a:candidates[0].hg__root)
         call append(0, split(file_diff, '\v\n'))
     endfor
     setlocal readonly

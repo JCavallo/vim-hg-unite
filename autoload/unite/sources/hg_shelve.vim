@@ -42,12 +42,13 @@ function! s:source.gather_candidates(args, context) "{{{
         return []
     endif
     let candidates = []
-    for line in split(system('hg shelve -l'), '\n')
+    for line in split(system('hg shelve -l -R ' . hg_root), '\n')
         let shelve_name = split(line, ' ')[0]
         call add(candidates, {
                 \ 'word' : line,
                 \ 'kind' : 'hg_shelve',
                 \ 'hg__shelve_name' : shelve_name,
+                \ 'hg__root' : hg_root
                 \ })
     endfor
     return candidates

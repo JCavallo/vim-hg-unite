@@ -42,12 +42,13 @@ function! s:source.gather_candidates(args, context) "{{{
         return []
     endif
     let candidates = []
-    for line in split(system('hg log --template "{rev}|{node|short}|{branches}|{date|isodate}|{desc|firstline}\n"'), '\n')
+    for line in split(system('hg log -R ' . hg_root . ' --template "{rev}|{node|short}|{branches}|{date|isodate}|{desc|firstline}\n"'), '\n')
         let line_data = split(line, '|')
         call add(candidates, {
                 \ 'word' : substitute(line, '|', ' ', 'g'),
                 \ 'kind' : 'hg_log',
                 \ 'hg__node' : line_data[1],
+                \ 'hg__root' : hg_root
                 \ })
     endfor
     return candidates

@@ -43,7 +43,7 @@ let s:kind.action_table.diff = {
 
 function! s:kind.action_table.diff.func(candidates)  " {{{
     let candidate_node = a:candidates[0].hg__node
-    let file_diff = system('hg diff -c ' . candidate_node)
+    let file_diff = system('hg diff -c ' . candidate_node . ' -R ' . a:candidates[0].hg__root)
     let window_exist = hgunite#tools#get_named_window('__Hg_Diff__')
     if window_exist == ''
         execute ':90vsplit __Hg_Diff__'
@@ -65,7 +65,7 @@ let s:kind.action_table.changelog = {
 
 function! s:kind.action_table.changelog.func(candidates)  " {{{
     let candidate_node = a:candidates[0].hg__node
-    let file_diff = system('hg log -r ' . candidate_node . ' --style default')
+    let file_diff = system('hg log -r ' . candidate_node . ' --style default' . ' -R ' . a:candidates[0].hg__root)
     let window_exist = hgunite#tools#get_named_window('__Hg_Log__')
     if window_exist == ''
         execute ':90vsplit __Hg_Log__'
