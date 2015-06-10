@@ -50,6 +50,9 @@ function! s:kind.action_table.revert.func(candidates)  " {{{
         endif
     endfor
     echom string(reverted_files) . ' files reverted'
+    call unite#start_script([['hg/status']],
+        \ {'start_insert': 0, 'is_redraw': 1}
+        \ )
 endfunction  " }}}
 
 let s:kind.action_table.add = {
@@ -66,6 +69,9 @@ function! s:kind.action_table.add.func(candidates)  " {{{
         endif
     endfor
     echom string(added_files) . ' files added'
+    call unite#start_script([['hg/status']],
+        \ {'start_insert': 0, 'is_redraw': 1}
+        \ )
 endfunction  " }}}
 
 let s:kind.action_table.diff = {
@@ -145,6 +151,9 @@ function! s:kind.action_table.shelve.func(candidates)  " {{{
     endfor
     call system(cmd)
     echo 'Shelved ' . nbr_of_files . ' file(s) !'
+    call unite#start_script([['hg/shelves']],
+        \ {'start_insert': 0, 'is_redraw': 1}
+        \ )
 endfunction  " }}}
 
 let &cpo = s:save_cpo

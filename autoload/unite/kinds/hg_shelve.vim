@@ -43,6 +43,9 @@ let s:kind.action_table.unshelve = {
 
 function! s:kind.action_table.unshelve.func(candidates)  " {{{
     call system('hg unshelve ' . a:candidates[0].hg__shelve_name . ' -R ' . a:candidates[0].hg__root)
+    call unite#start_script([['hg/status']],
+        \ {'start_insert': 0, 'is_redraw': 1}
+        \ )
 endfunction  " }}}
 
 let s:kind.action_table.diff = {
