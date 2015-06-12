@@ -1,5 +1,5 @@
 " #############################################################################
-" File: autoload/hgunite/tools.vim
+" File: plugin/vim-hg-unite.vim
 " Author: Jean Cavallo <jean.cavallo@hotmail.fr>
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
@@ -25,38 +25,39 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! hgunite#tools#get_repo_root(source_file) "{{{
-    if a:source_file
-        let output = system('cd ' . a:source_file . ';hg root')[:-2]
-        call system('cd -')
-    else
-        let output = system('hg root')[:-2]
-    endif
-    if output !~ '^abort: no repository found'
-        return output
-    endif
-    for buf_nr in range(1, bufnr('$'))
-        let name = bufname(buf_nr)
-        if name != ''
-            let output = system('cd ' . fnamemodify(name, ':p:h') . ';hg root')[:-2]
-            call system('cd -')
-            if output !~ '^abort: no repository found'
-                return output
-            endif
-        endif
-    endfor
-    echoerr 'No repository found'
-    return ''
+if !exists("g:hg_unite_default_mappings") || g:hg_unite_default_mappings
+    nnoremap <silent><leader>hf
+        \ :execute "normal \<Plug>(hg-unite-log-file)"<CR>
+    nnoremap <silent><leader>hd
+        \ :execute "normal \<Plug>(hg-unite-diff)"<CR>
+endif
+
+nnoremap <silent><Plug>(hg-unite-log-file)
+    \ :<C-U>call HgLogCurrentFile()<CR>
+nnoremap <silent><Plug>(hg-unite-diff)
+    \ :<C-U>call HgDiff()<CR>
+
+function! HgLogCurrentFile() " {{{
+    call unite#start_script([['hg/log', expand('%')]],
+        \ {'start_insert': 0, 'is_redraw': 1}
+        \ )
 endfunction  " }}}
 
-function! hgunite#tools#get_named_window(name) "{{{
-    let winnr = bufwinnr('^' . a:name . '$')
-    if (winnr >=  0)
-        execute winnr . 'wincmd w'
-        return 1
+function! HgDiff() " {{{
+    let window_exist = hgunite#tools#get_named_window('__Hg_Diff__')
+    if window_exist == ''
+        execute ':90vsplit __Hg_Diff__'
+        setlocal filetype=diff
+        setlocal buftype=nofile
     else
-        return ''
+        setlocal noreadonly
     endif
+    normal! ggdG
+    let file_diff = system('hg diff -R ' .
+        \ hgunite#tools#get_repo_root(expand('%')))
+    call append(0, split(file_diff, '\v\n'))
+    setlocal readonly
+    normal! gg
 endfunction  " }}}
 
 let &cpo = s:save_cpo

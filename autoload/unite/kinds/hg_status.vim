@@ -82,7 +82,7 @@ let s:kind.action_table.diff = {
 function! s:kind.action_table.diff.func(candidates)  " {{{
     let window_exist = hgunite#tools#get_named_window('__Hg_Diff__')
     if window_exist == ''
-        vsplit __Hg_Diff__
+        execute ':90vsplit __Hg_Diff__'
         setlocal filetype=diff
         setlocal buftype=nofile
     else
