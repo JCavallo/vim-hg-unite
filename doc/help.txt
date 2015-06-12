@@ -101,6 +101,7 @@ Note: This source takes an optional parameter which is a path to a file that
 will be used to narrow the log to commits modifying this file. See
 *hgunite-hglogfile*
 
+-----------------------------------------------------------------------------
 SHELVE                                              |hgunite-shelve|
 
 The *hg/shelve* source displays the list of current shelves on the repository.
