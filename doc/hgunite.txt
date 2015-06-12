@@ -1,0 +1,143 @@
+*hgunite.txt* Vim tools for those using mercurial
+
+Version: 1.0
+Author : Jean Cavallo <jean.cavallo@hotmail.fr>
+License: MIT license  {{{
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+}}}
+
+CONTENTS                                            *hgunite-contents*
+
+Introduction                                        |hgunite-introduction|
+Install                                             |hgunite-install|
+Usage                                               |hgunite-usage|
+    Log                                             |hgunite-log|
+    Shelve                                          |hgunite-shelve|
+    Status                                          |hgunite-status|
+    Tools                                           |hgunite-tools|
+Mappings                                            |hgunite-mappings|
+
+==============================================================================
+INTRODUCTION                                        *hgunite-introduction*
+
+*hgunite* is designed as a way to leverate *unite* when working on projetcts
+that use the mercurial (https://mercurial.selenic.com/) version control
+system. Available features are :
+    - *unite* sources to view repository log, shelves, and current status
+    - *unite* kinds to consult diffs (current modifications, commit patch...)
+    - Shortcuts to display current diff, current file history
+
+==============================================================================
+INSTALL                                             *hgunite-install*
+
+Install the distributed files into your Vim script directory which is usually
+~/.vim/. You should consider to use one of the famous package managers for Vim
+like vundle or neobundle to install the plugin.
+
+==============================================================================
+USAGE                                               *hgunite-usage*
+
+For perfect usage, the vim instance should be running inside the repository
+(i.e. :pwd should be in the repository). Elseway, it will try to guess a
+repository based on open files, but this feature is not (and cannot be)
+perfect.
+
+Of course, actions based on the current file look for a repository in the
+parents of said file and take actions accordingly.
+
+-----------------------------------------------------------------------------
+STATUS                                              |hgunite-status|
+
+The source *hg/status* is available. It displays a list of all currently
+modified files in the repository, as well as their status (unknown, added,
+removed, modified). It is basically an integrated interface to the 'hg status'
+command.
+
+Possible actions on candidates are :
+
+    - *diff* to display the current diff on selected files.
+    - *add* for files which are with status 'unknown'
+    - *revert* for modified files (which will cancel all modifications
+      relative to the current parent, but will NOT delete new files)
+    - *commit* selected files, which will ask for a commit message, then
+      commit the files.
+    - *shelve* selected files.
+
+All actions can be taken with multiple files selected.
+
+-----------------------------------------------------------------------------
+LOG                                                 *hgunite-log*
+
+The *hg/log* source displays the log of the current repository. It can be
+long to load for very big repositories, but allows to search easily for
+commits by name or date.
+
+Possible actions are :
+
+    - *diff* the selected node, which will open a vertical split with the
+      commit complete diff (including commit metadata)
+    - *changelog* only displays the complete changelog for the commit, as the
+      source view only provides minimum information.
+
+Those actions can only be taken ONE candidate at a time.
+
+Note: This source takes an optional parameter which is a path to a file that
+will be used to narrow the log to commits modifying this file. See
+*hgunite-hglogfile*
+
+SHELVE                                              |hgunite-shelve|
+
+The *hg/shelve* source displays the list of current shelves on the repository.
+If you do not know about shelves, you should investigate :)
+
+Possible actions are :
+
+    - *diff* to display the contents of the selected shelve.
+    - *unshelve* to apply the shelve on the current repository.
+
+-----------------------------------------------------------------------------
+TOOLS                                               |hgunite-tools|
+
+HgDiff()                                            |hgunite-hgdiff|
+
+    Opens the diff on all current modifications in a new split. This applies
+    to the repository of the current file.
+
+HgLogCurrentFile()                                  |hgunite-hglogfile|
+
+    Opens the *hg/log* source with the current file as parameter.
+
+==============================================================================
+MAPPINGS                                            *hgunite-mappings*
+
+You can remap the following mappings to suit your needs the default mappings
+are not good for you :
+
+<Plug>(hg-unite-log-file)                       |<Plug>(hg-unite-log-file)|
+
+    Calls the *hg/log* source with the current file. See *hgunite-hglofile*
+
+<Plug>(hg-unite-diff)                           |<Plug>(hg-unite-diff)|
+
+    Opens the current diff on the repository
+
+Default mappings :
+
+    <Leader>hf          <Plug>(hg-unite-log-file)
+    <Leader>hd          <Plug>(hg-unite-diff)
