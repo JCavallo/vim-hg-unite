@@ -31,7 +31,7 @@ endfunction  " }}}
 
 let s:kind = {
     \ 'name': 'hg_shelve',
-    \ 'default_action': '',
+    \ 'default_action': 'diff',
     \ 'action_table': {},
     \ 'parents': ['word'],
     \ }
@@ -68,6 +68,24 @@ function! s:kind.action_table.diff.func(candidates)  " {{{
     call append(0, split(file_diff, '\v\n'))
     setlocal readonly
     normal! gg
+endfunction  " }}}
+
+let s:kind.action_table.delete = {
+    \ 'is_selectable': 1,
+    \ 'is_quit': 1
+    \ }
+
+function! s:kind.action_table.delete.func(candidates)  " {{{
+    let check_ok = unite#util#input('The selected shelve will be deleted, '.
+        \ 'write "yes" to confirm : ')
+    if check_ok != 'yes'
+        echom 'Aborting'
+        return
+    endif
+    call system('hg shelve --delete ' . a:candidates[0].hg__shelve_name . ' -R ' . a:candidates[0].hg__root)
+    call unite#start_script([['hg/shelves']],
+        \ {'start_insert': 0, 'is_redraw': 1}
+        \ )
 endfunction  " }}}
 
 let &cpo = s:save_cpo
