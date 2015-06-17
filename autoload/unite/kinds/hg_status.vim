@@ -149,7 +149,11 @@ function! s:kind.action_table.shelve.func(candidates)  " {{{
             let nbr_of_files = nbr_of_files + 1
         endif
     endfor
-    call system(cmd)
+    let shelve_name = unite#util#input('Shelve name (empty to abort): ')
+    if shelve_name == ''
+        return
+    endif
+    call system(cmd . ' -m ' . shelve_name)
     echo 'Shelved ' . nbr_of_files . ' file(s) !'
     call unite#start_script([['hg/shelves']],
         \ {'start_insert': 0, 'is_redraw': 1}
