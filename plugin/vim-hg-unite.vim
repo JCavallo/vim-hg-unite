@@ -44,6 +44,8 @@ function! HgLogCurrentFile() " {{{
 endfunction  " }}}
 
 function! HgDiff() " {{{
+    let hg_root = hgunite#tools#get_repo_root(expand('%:p:h'))
+    let file_diff = system('hg diff -R ' . hg_root)
     let window_exist = hgunite#tools#get_named_window('__Hg_Diff__')
     if window_exist == ''
         execute ':90vsplit __Hg_Diff__'
@@ -53,8 +55,6 @@ function! HgDiff() " {{{
         setlocal noreadonly
     endif
     normal! ggdG
-    let file_diff = system('hg diff -R ' .
-        \ hgunite#tools#get_repo_root(expand('%')))
     call append(0, split(file_diff, '\v\n'))
     setlocal readonly
     normal! gg
