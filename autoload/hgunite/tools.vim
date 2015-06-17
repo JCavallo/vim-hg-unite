@@ -25,9 +25,9 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! hgunite#tools#get_repo_root(source_file) "{{{
-    if a:source_file
-        let output = system('cd ' . a:source_file . ';hg root')[:-2]
+function! hgunite#tools#get_repo_root(...) "{{{
+    if a:0
+        let output = system('cd ' . a:1 . ';hg root')[:-2]
         call system('cd -')
     else
         let output = system('hg root')[:-2]
