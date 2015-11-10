@@ -36,11 +36,11 @@ Mappings                                            |hgunite-mappings|
 ==============================================================================
 INTRODUCTION                                        *hgunite-introduction*
 
-*hgunite* is designed as a way to leverate *unite* when working on projetcts
+*hgunite* is designed as a way to leverate unite when working on projetcts
 that use the mercurial (https://mercurial.selenic.com/) version control
 system. Available features are :
-    - *unite* sources to view repository log, shelves, and current status
-    - *unite* kinds to consult diffs (current modifications, commit patch...)
+    - unite sources to view repository log, shelves, and current status
+    - unite kinds to consult diffs (current modifications, commit patch...)
     - Shortcuts to display current diff, current file history
 
 ==============================================================================
@@ -71,7 +71,7 @@ command.
 
 Possible actions on candidates are :
 
-    - *diff* to display the current diff on selected files.
+    - diff to display the current diff on selected files.
     - *add* for files which are with status 'unknown'
     - *revert* for modified files (which will cancel all modifications
       relative to the current parent, but will NOT delete new files)
@@ -90,7 +90,7 @@ commits by name or date.
 
 Possible actions are :
 
-    - *diff* the selected node, which will open a vertical split with the
+    - diff the selected node, which will open a vertical split with the
       commit complete diff (including commit metadata)
     - *changelog* only displays the complete changelog for the commit, as the
       source view only provides minimum information.
@@ -109,7 +109,7 @@ If you do not know about shelves, you should investigate :)
 
 Possible actions are :
 
-    - *diff* to display the contents of the selected shelve.
+    - diff to display the contents of the selected shelve.
     - *unshelve* to apply the shelve on the current repository.
 
 -----------------------------------------------------------------------------
@@ -122,7 +122,7 @@ HgDiff()                                            |hgunite-hgdiff|
 
 HgLogCurrentFile()                                  |hgunite-hglogfile|
 
-    Opens the *hg/log* source with the current file as parameter.
+    Opens the hg/log source with the current file as parameter.
 
 ==============================================================================
 MAPPINGS                                            *hgunite-mappings*
@@ -132,7 +132,7 @@ are not good for you :
 
 <Plug>(hg-unite-log-file)                       |<Plug>(hg-unite-log-file)|
 
-    Calls the *hg/log* source with the current file. See *hgunite-hglofile*
+    Calls the hg/log source with the current file. See *hgunite-hglofile*
 
 <Plug>(hg-unite-diff)                           |<Plug>(hg-unite-diff)|
 
