@@ -142,3 +142,5 @@ Default mappings :
 
     <Leader>hf          <Plug>(hg-unite-log-file)
     <Leader>hd          <Plug>(hg-unite-diff)
+==============================================================================
+vim:ft=help
